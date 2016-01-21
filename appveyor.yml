@@ -1,0 +1,22 @@
+init:
+  - git config core.autocrlf false
+install:
+  - pacman -S base-devel mingw-w64-x86_64-toolchain \
+    mingw-w64-x86_64-xpm-nox mingw-w64-x86_64-libtiff \
+    mingw-w64-x86_64-giflib mingw-w64-x86_64-jbigkit \
+    mingw-w64-x86_64-libpng mingw-w64-x86_64-libjpeg-turbo \
+    mingw-w64-x86_64-librsvg mingw-w64-x86_64-libxml2 \
+    mingw-w64-x86_64-gnutls
+
+platform:
+  - x64
+  
+build_script:
+  - ./autogen.sh
+  - PKG_CONFIG_PATH=/mingw64/lib/pkgconfig ./configure \
+    --host=x86_64-w64-mingw32 --target=x86_64-w64-mingw32 \
+    --build=x86_64-w64-mingw32 --with-jpeg --with-xpm \
+    --with-png --with-tiff --with-rsvg --with-xml2 --with-gnutls \
+    --without-imagemagick
+  - make
+  - make install prefix=/c/emacs
